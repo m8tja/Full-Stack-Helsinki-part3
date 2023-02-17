@@ -4,7 +4,6 @@ const morgan = require("morgan")
 app.use(express.json())
 //app.use(morgan("tiny"))
 
-//morgan.token('data', (req, res) => JSON.stringify(req.body));
 morgan.token("data", (request, response) => {
   if(request.method === "POST") {
     return JSON.stringify(request.body)
