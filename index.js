@@ -72,19 +72,7 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.post("/api/persons", (request, response, next) => {
   const person = request.body
-  /*
-  if(!person.name) {
-    return response.status(400).json({
-      error: "name missing"
-    })
-  }
-
-  if(!person.number) {
-    return response.status(400).json({
-      error: "number missing"
-    })
-  }*/
-  
+ 
   const newPerson = new Person({
     name: person.name,
     number: person.number
@@ -92,13 +80,9 @@ app.post("/api/persons", (request, response, next) => {
   
   newPerson.save()
     .then(savedPerson => {
-      console.log(savedPerson.name)
       response.json(savedPerson)
     })
-    .catch(error => {
-      console.log("JAA")
-      next(error)
-    })
+    .catch(error => next(error))
 })
 
 app.delete("/api/persons/:id", (request, response, next) => {
