@@ -36,13 +36,6 @@ morgan.token("data", (request) => {
 
 app.use(morgan(":method :url :status - :response-time ms :data"))
 
-app.get("/api/persons", (_request, response) => {
-  Person.find({})
-    .then(people => {
-      response.json(people)
-    })
-})
-
 app.get("/info", (_request, response) => {
   const date = new Date()
 
@@ -53,6 +46,13 @@ app.get("/info", (_request, response) => {
     })
     .catch(error => {
       console.log(error)
+    })
+})
+
+app.get("/api/persons", (_request, response) => {
+  Person.find({})
+    .then(people => {
+      response.json(people)
     })
 })
 
@@ -80,6 +80,21 @@ app.post("/api/persons", (request, response, next) => {
   newPerson.save()
     .then(savedPerson => {
       response.json(savedPerson)
+    })
+    .catch(error => next(error))
+})
+
+app.put("/api/persons/:id", (request, response, next) => {
+  const person = request.body
+
+  const changedPerson = new Person({
+    name: person.name,
+    number: person.number
+  })
+
+  Person.updateOne({ name: changedPerson.name }, { $set: { number: changedPerson.number }})
+    .then(() => {
+      response.json(changedPerson)
     })
     .catch(error => next(error))
 })
